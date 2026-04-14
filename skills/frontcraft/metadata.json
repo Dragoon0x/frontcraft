@@ -1,0 +1,10 @@
+{
+  "name": "frontcraft",
+  "version": "1.0.0",
+  "description": "The definitive frontend craft specification. 324 rules across 20 categories with measurable thresholds, priority levels, and production code.",
+  "author": "Dragoon0x",
+  "license": "MIT",
+  "repository": "https://github.com/Dragoon0x/frontcraft",
+  "tags": ["frontend","ui","ux","accessibility","performance","animation","typography","color","responsive","dark-mode","forms","navigation","micro-interactions","css","react","web","design-system","best-practices","agent-skill","code-review"],
+  "stats": { "total_rules": 324, "critical": 65, "high": 152, "medium": 98, "low": 9, "categories": 20 }
+}

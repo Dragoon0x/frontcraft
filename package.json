@@ -1,0 +1,58 @@
+{
+  "name": "frontcraft",
+  "version": "1.0.0",
+  "description": "The Frontend Craft Specification. 324 rules across 20 categories with measurable thresholds. Utilities for color contrast, timing validation, spring physics, typography scales, spacing systems, and touch target compliance.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "skills"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "test": "node test/run.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "frontend",
+    "ui",
+    "ux",
+    "accessibility",
+    "wcag",
+    "contrast",
+    "animation",
+    "spring",
+    "easing",
+    "typography",
+    "spacing",
+    "touch-target",
+    "performance",
+    "design-system",
+    "agent-skill",
+    "best-practices",
+    "linting",
+    "validation"
+  ],
+  "author": "Dragoon0x (https://github.com/Dragoon0x)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dragoon0x/frontcraft"
+  },
+  "homepage": "https://dragoon0x.github.io/frontcraft",
+  "bugs": {
+    "url": "https://github.com/Dragoon0x/frontcraft/issues"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

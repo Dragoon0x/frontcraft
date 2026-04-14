@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>frontcraft — The Frontend Craft Specification</title>
+<meta name="description" content="324 rules across 20 categories. Every rule has a name, a priority, and a measurable threshold. The definitive agent skill for frontend craft.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf9;--surface:#f0efed;--border:#e0dedb;
+  --text:#1a1917;--text-secondary:#6b6960;--text-muted:#9c9789;
+  --accent:#d14b00;--accent-hover:#b84200;--accent-subtle:#fff5ef;
+  --green:#16803c;--red:#dc2626;--amber:#d97706;
+  --font-serif:'Newsreader',Georgia,serif;
+  --font-mono:'DM Mono','SF Mono',monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;
+  --space-16:64px;--space-20:80px;--space-24:96px;
+  --measure:680px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111110;--surface:#1c1b19;--border:#2c2a27;
+    --text:#e8e6e1;--text-secondary:#a09a8f;--text-muted:#706b60;
+    --accent:#f07030;--accent-hover:#ff8040;--accent-subtle:#1f1510;
+    --green:#22c55e;--red:#f87171;--amber:#fbbf24;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:0.01ms!important}
+}
+html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:var(--bg);color:var(--text);font-family:var(--font-serif);line-height:1.6;min-height:100vh}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:0.15em;transition:color 120ms ease-out}
+a:hover{color:var(--accent-hover)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+::selection{background:var(--accent);color:#fff}
+
+/* Skip link — a11y-skip-link */
+.skip-link{position:absolute;top:-100px;left:var(--space-4);padding:var(--space-2) var(--space-4);background:var(--accent);color:#fff;font-family:var(--font-mono);font-size:0.8rem;border-radius:0 0 4px 4px;z-index:1000;text-decoration:none;transition:top 150ms ease-out}
+.skip-link:focus{top:0}
+
+/* Layout */
+.page{max-width:var(--measure);margin:0 auto;padding:var(--space-16) var(--space-6) var(--space-24)}
+@media(max-width:480px){.page{padding:var(--space-10) var(--space-4) var(--space-16)}}
+
+/* Hero */
+.hero{padding-bottom:var(--space-16);border-bottom:1px solid var(--border)}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2rem,1.2rem + 2.5vw,3.2rem);font-weight:600;line-height:1.12;letter-spacing:-0.03em;margin-bottom:var(--space-4);text-wrap:balance}
+.hero .tagline{font-size:clamp(1rem,0.85rem + 0.5vw,1.2rem);color:var(--text-secondary);line-height:1.5;max-width:540px}
+
+/* Stats bar */
+.stats{display:flex;gap:var(--space-8);flex-wrap:wrap;margin-top:var(--space-8);padding:var(--space-4) 0}
+.stat{display:flex;flex-direction:column}
+.stat-number{font-family:var(--font-mono);font-size:1.5rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--text);line-height:1.2}
+.stat-label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+
+/* Install block */
+.install{margin-top:var(--space-10);display:flex;flex-direction:column;gap:var(--space-3)}
+.install-label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
+.install-cmd{font-family:var(--font-mono);font-size:0.9rem;background:var(--surface);border:1px solid var(--border);padding:var(--space-3) var(--space-4);border-radius:6px;cursor:pointer;transition:border-color 150ms ease-out;position:relative;display:flex;align-items:center;justify-content:space-between}
+.install-cmd:hover{border-color:var(--text-muted)}
+.install-cmd code{color:var(--text)}
+.install-cmd .copy-hint{font-size:0.7rem;color:var(--text-muted);transition:color 120ms ease-out}
+.install-cmd:hover .copy-hint{color:var(--text-secondary)}
+.install-cmd.copied .copy-hint{color:var(--green)}
+
+/* Sections */
+section{padding:var(--space-16) 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+section h2{font-family:var(--font-serif);font-size:clamp(1.3rem,1rem + 0.8vw,1.7rem);font-weight:600;line-height:1.2;letter-spacing:-0.02em;margin-bottom:var(--space-6)}
+section p{color:var(--text-secondary);line-height:1.6;margin-bottom:var(--space-4)}
+section p:last-child{margin-bottom:0}
+
+/* Category grid */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--space-3);margin-top:var(--space-6)}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:var(--space-4);transition:border-color 150ms ease-out}
+.cat-card:hover{border-color:var(--text-muted)}
+.cat-name{font-family:var(--font-mono);font-size:0.82rem;font-weight:500;color:var(--text);margin-bottom:var(--space-1)}
+.cat-count{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted)}
+.cat-bar{display:flex;gap:2px;margin-top:var(--space-2);height:4px;border-radius:2px;overflow:hidden}
+.cat-bar span{border-radius:1px}
+.cat-bar .critical{background:var(--red)}
+.cat-bar .high{background:var(--amber)}
+.cat-bar .medium{background:var(--text-muted)}
+
+/* Demo: contrast checker */
+.demo-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:var(--space-6);margin-top:var(--space-6)}
+.demo-label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:var(--space-4)}
+.contrast-demo{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
+@media(max-width:480px){.contrast-demo{grid-template-columns:1fr}}
+.contrast-input-group{display:flex;flex-direction:column;gap:var(--space-2)}
+.contrast-input-group label{font-family:var(--font-mono);font-size:0.78rem;color:var(--text-secondary)}
+.contrast-input-group input[type="text"]{font-family:var(--font-mono);font-size:0.9rem;padding:var(--space-2) var(--space-3);border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);transition:border-color 150ms ease-out}
+.contrast-input-group input:focus{outline:none;border-color:var(--accent)}
+.contrast-result{margin-top:var(--space-4);padding:var(--space-4);border-radius:6px;font-family:var(--font-mono);font-size:0.85rem;display:grid;grid-template-columns:auto 1fr;gap:var(--space-2) var(--space-4);align-items:center}
+.contrast-ratio{font-size:1.5rem;font-weight:500;font-variant-numeric:tabular-nums;grid-column:1/-1;margin-bottom:var(--space-1)}
+.badge{display:inline-flex;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:500;letter-spacing:0.03em}
+.badge.pass{background:#dcfce7;color:#15803d}
+.badge.fail{background:#fef2f2;color:#dc2626}
+@media(prefers-color-scheme:dark){
+  .badge.pass{background:#052e16;color:#4ade80}
+  .badge.fail{background:#450a0a;color:#fca5a5}
+}
+.contrast-preview{margin-top:var(--space-4);padding:var(--space-4);border-radius:6px;text-align:center;font-family:var(--font-serif);font-size:1.1rem}
+
+/* Demo: spring visualizer */
+.spring-canvas{width:100%;height:120px;border-radius:4px;margin-top:var(--space-3)}
+.spring-controls{display:flex;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-3)}
+.spring-control{display:flex;flex-direction:column;gap:var(--space-1);flex:1;min-width:100px}
+.spring-control label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted)}
+.spring-control input[type="range"]{width:100%;accent-color:var(--accent)}
+.spring-control .value{font-family:var(--font-mono);font-size:0.78rem;font-variant-numeric:tabular-nums;color:var(--text-secondary)}
+.spring-meta{display:flex;gap:var(--space-4);margin-top:var(--space-3);font-family:var(--font-mono);font-size:0.78rem;color:var(--text-secondary);flex-wrap:wrap}
+.spring-meta span{display:flex;gap:var(--space-1)}
+
+/* Demo: timing */
+.timing-bars{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-4)}
+.timing-row{display:flex;align-items:center;gap:var(--space-3)}
+.timing-name{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);width:100px;flex-shrink:0;text-align:right}
+.timing-bar-wrap{flex:1;height:20px;background:var(--bg);border-radius:3px;position:relative;overflow:hidden}
+.timing-bar{height:100%;border-radius:3px;background:var(--accent);opacity:0.7;transition:width 300ms ease-out}
+.timing-val{font-family:var(--font-mono);font-size:0.7rem;font-variant-numeric:tabular-nums;color:var(--text-muted);width:50px;flex-shrink:0}
+
+/* Footer */
+footer{padding:var(--space-12) 0 0;color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2)}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<main id="main-content" class="page">
+
+<!-- Hero -->
+<header class="hero">
+  <h1>frontcraft</h1>
+  <p class="tagline">The Frontend Craft Specification. Every rule has a name, a priority, and a measurable threshold. No opinions without numbers.</p>
+
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><span class="stat-number">324</span><span class="stat-label">Rules</span></div>
+    <div class="stat" role="listitem"><span class="stat-number">20</span><span class="stat-label">Categories</span></div>
+    <div class="stat" role="listitem"><span class="stat-number">65</span><span class="stat-label">Critical</span></div>
+    <div class="stat" role="listitem"><span class="stat-number">152</span><span class="stat-label">High</span></div>
+    <div class="stat" role="listitem"><span class="stat-number">98</span><span class="stat-label">Medium</span></div>
+  </div>
+
+  <div class="install">
+    <span class="install-label">Agent Skill</span>
+    <div class="install-cmd" tabindex="0" role="button" aria-label="Copy install command" onclick="copyCmd(this,'npx skills add Dragoon0x/frontcraft')">
+      <code>npx skills add Dragoon0x/frontcraft</code>
+      <span class="copy-hint">click to copy</span>
+    </div>
+    <span class="install-label" style="margin-top:var(--space-2)">npm Package</span>
+    <div class="install-cmd" tabindex="0" role="button" aria-label="Copy npm install command" onclick="copyCmd(this,'npm install frontcraft')">
+      <code>npm install frontcraft</code>
+      <span class="copy-hint">click to copy</span>
+    </div>
+  </div>
+</header>
+
+<!-- Categories -->
+<section>
+  <h2>20 Categories</h2>
+  <p>Every frontend surface area covered. Motion, typography, accessibility, color, performance, layout, forms, interaction, and more.</p>
+
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<!-- Live Demo: Contrast Checker -->
+<section>
+  <h2>Live Utilities</h2>
+  <p>The npm package ships TypeScript utilities that validate rules programmatically. Try the contrast checker below.</p>
+
+  <div class="demo-block">
+    <div class="demo-label">WCAG Contrast Checker — rules color-contrast-aa-minimum, color-contrast-ui-components</div>
+    <div class="contrast-demo">
+      <div class="contrast-input-group">
+        <label for="fg">Foreground</label>
+        <input type="text" id="fg" value="#1a1917" spellcheck="false" aria-label="Foreground color hex value">
+      </div>
+      <div class="contrast-input-group">
+        <label for="bg">Background</label>
+        <input type="text" id="bg" value="#fafaf9" spellcheck="false" aria-label="Background color hex value">
+      </div>
+    </div>
+    <div class="contrast-result" id="contrastResult" aria-live="polite"></div>
+    <div class="contrast-preview" id="contrastPreview">Sample text preview</div>
+  </div>
+</section>
+
+<!-- Live Demo: Spring Visualizer -->
+<section>
+  <h2>Spring Physics</h2>
+  <p>Configure a spring and see if it meets the spec. The analyzer validates stiffness range, damping ratio, settle time, and context-specific rules in real time.</p>
+
+  <div class="demo-block">
+    <div class="demo-label">Spring Analyzer — rules spring-stiffness-range, spring-settle-threshold, spring-damping-ratio-guide</div>
+    <canvas class="spring-canvas" id="springCanvas" aria-label="Spring animation visualization"></canvas>
+    <div class="spring-controls">
+      <div class="spring-control">
+        <label for="stiffness">Stiffness</label>
+        <input type="range" id="stiffness" min="50" max="400" value="200">
+        <span class="value" id="stiffnessVal">200</span>
+      </div>
+      <div class="spring-control">
+        <label for="damping">Damping</label>
+        <input type="range" id="damping" min="5" max="50" value="20">
+        <span class="value" id="dampingVal">20</span>
+      </div>
+      <div class="spring-control">
+        <label for="mass">Mass</label>
+        <input type="range" id="mass" min="5" max="20" value="10" step="1">
+        <span class="value" id="massVal">1.0</span>
+      </div>
+    </div>
+    <div class="spring-meta" id="springMeta" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Timing reference -->
+<section>
+  <h2>Timing Thresholds</h2>
+  <p>Every timing value in the spec, visualized. These thresholds come from perception research — the point where users notice a delay, feel sluggishness, or lose attention.</p>
+
+  <div class="demo-block">
+    <div class="demo-label">Animation Timing Reference — Category 1: Motion & Timing</div>
+    <div class="timing-bars" id="timingBars"></div>
+  </div>
+</section>
+
+<!-- Coverage -->
+<section>
+  <h2>Coverage</h2>
+  <p>Every frontend surface area, quantified. Accessibility alone has 35 rules. Motion, performance, and layout each have 20+. Every threshold is backed by WCAG standards, perception research, or platform guidelines.</p>
+</section>
+
+<footer>
+  <span>MIT — <a href="https://github.com/Dragoon0x">Dragoon0x</a></span>
+  <span><a href="https://github.com/Dragoon0x/frontcraft">GitHub</a></span>
+</footer>
+
+</main>
+
+<script>
+// Copy to clipboard
+function copyCmd(el, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    el.querySelector('.copy-hint').textContent = 'copied';
+    setTimeout(() => { el.classList.remove('copied'); el.querySelector('.copy-hint').textContent = 'click to copy'; }, 2000);
+  });
+}
+// Enter/Space on install blocks
+document.querySelectorAll('.install-cmd').forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+});
+
+// Category data
+const cats = [
+  ['Motion & Timing',26,5,12,9],['Typography',25,6,10,9],['Accessibility',35,17,17,1],
+  ['Color & Contrast',20,4,9,7],['Touch & Interaction',20,6,9,5],['Layout & Spacing',19,4,8,7],
+  ['Responsive Design',16,2,9,5],['Performance',24,5,13,6],['Loading States',13,1,7,5],
+  ['Error States',14,4,7,3],['Dark Mode',12,0,6,6],['Keyboard Navigation',10,3,4,3],
+  ['Sound Design',8,2,1,5],['Micro-interactions',15,0,4,11],['Forms & Input',15,2,7,6],
+  ['Navigation',12,1,8,3],['Icons & Imagery',11,1,7,3],['Scroll Behavior',9,0,4,5],
+  ['Content & Copy',10,0,5,5],['Performance Perception',10,2,5,3],
+];
+
+const grid = document.getElementById('catGrid');
+cats.forEach(([name, total, c, h, m]) => {
+  const card = document.createElement('div');
+  card.className = 'cat-card';
+  const maxBar = Math.max(...cats.map(x => x[1]));
+  card.innerHTML = `<div class="cat-name">${name}</div><div class="cat-count">${total} rules</div>
+    <div class="cat-bar"><span class="critical" style="width:${(c/maxBar)*100}%"></span><span class="high" style="width:${(h/maxBar)*100}%"></span><span class="medium" style="width:${(m/maxBar)*100}%"></span></div>`;
+  grid.appendChild(card);
+});
+
+// Contrast checker
+function parseHex(hex) {
+  hex = hex.replace('#','');
+  if (hex.length===3) hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  return [parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)];
+}
+function relLum(r,g,b) {
+  const [rs,gs,bs]=[r,g,b].map(c=>{const s=c/255;return s<=0.04045?s/12.92:Math.pow((s+0.055)/1.055,2.4)});
+  return 0.2126*rs+0.7152*gs+0.0722*bs;
+}
+function contrast(c1,c2){const l1=relLum(...parseHex(c1)),l2=relLum(...parseHex(c2));return(Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05)}
+
+function updateContrast() {
+  const fg=document.getElementById('fg').value, bg=document.getElementById('bg').value;
+  try {
+    const r = contrast(fg, bg);
+    const rr = Math.round(r*100)/100;
+    const aa=r>=4.5, aaa=r>=7, aaL=r>=3;
+    document.getElementById('contrastResult').innerHTML = `
+      <div class="contrast-ratio">${rr}:1</div>
+      <span class="badge ${aa?'pass':'fail'}">AA ${aa?'Pass':'Fail'}</span><span>Normal text (4.5:1)</span>
+      <span class="badge ${aaa?'pass':'fail'}">AAA ${aaa?'Pass':'Fail'}</span><span>Enhanced (7:1)</span>
+      <span class="badge ${aaL?'pass':'fail'}">AA Large ${aaL?'Pass':'Fail'}</span><span>Large text (3:1)</span>`;
+    const preview = document.getElementById('contrastPreview');
+    preview.style.background = bg;
+    preview.style.color = fg;
+    preview.textContent = `${rr}:1 — The quick brown fox jumps over the lazy dog`;
+  } catch(e) {
+    document.getElementById('contrastResult').innerHTML = '<div style="color:var(--red)">Enter valid hex colors (#000 or #000000)</div>';
+  }
+}
+document.getElementById('fg').addEventListener('input', updateContrast);
+document.getElementById('bg').addEventListener('input', updateContrast);
+updateContrast();
+
+// Spring visualizer
+let springAnim = null;
+function updateSpring() {
+  const stiffness = +document.getElementById('stiffness').value;
+  const damping = +document.getElementById('damping').value;
+  const mass = +document.getElementById('mass').value / 10;
+  document.getElementById('stiffnessVal').textContent = stiffness;
+  document.getElementById('dampingVal').textContent = damping;
+  document.getElementById('massVal').textContent = mass.toFixed(1);
+
+  const ratio = damping / (2 * Math.sqrt(stiffness * mass));
+  const omega = Math.sqrt(stiffness / mass);
+  const settle = ratio >= 1 ? (4000/(ratio*omega)) : ((-Math.log(0.01))/(ratio*omega))*1000;
+  const type = ratio < 1 ? 'Underdamped (bouncy)' : ratio === 1 ? 'Critically damped' : 'Overdamped';
+
+  const issues = [];
+  if (settle > 600) issues.push('Settle > 600ms');
+  if (stiffness < 100 || stiffness > 300) issues.push('Stiffness outside 100-300');
+  if (mass > 1.5) issues.push('Mass > 1.5');
+
+  const meta = document.getElementById('springMeta');
+  meta.innerHTML = `<span>Ratio: <strong>${ratio.toFixed(3)}</strong></span>
+    <span>Settle: <strong>${Math.round(settle)}ms</strong></span>
+    <span>Type: <strong>${type}</strong></span>
+    ${issues.length ? `<span style="color:var(--red)">⚠ ${issues.join(', ')}</span>` : '<span style="color:var(--green)">✓ Valid</span>'}`;
+
+  // Animate canvas
+  const canvas = document.getElementById('springCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const w = canvas.offsetWidth, h = canvas.offsetHeight;
+
+  if (springAnim) cancelAnimationFrame(springAnim);
+  let x = 0, v = 0, target = w * 0.8;
+  const points = [];
+  const startTime = performance.now();
+
+  function draw(now) {
+    const dt = 1/60;
+    const force = -stiffness * (x - target);
+    const dampForce = -damping * v;
+    const acc = (force + dampForce) / mass;
+    v += acc * dt;
+    x += v * dt;
+    points.push(x);
+    if (points.length > w) points.shift();
+
+    ctx.clearRect(0, 0, w, h);
+    // Grid
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border');
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 5; i++) {
+      const y2 = (h / 5) * i;
+      ctx.beginPath(); ctx.moveTo(0, y2); ctx.lineTo(w, y2); ctx.stroke();
+    }
+    // Target line
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted');
+    ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(0, h*0.2); ctx.lineTo(w, h*0.2); ctx.stroke(); ctx.setLineDash([]);
+    // Curve
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    points.forEach((px, i) => {
+      const py = h - (px / (w * 0.85)) * (h * 0.7) - h * 0.1;
+      i === 0 ? ctx.moveTo(i, py) : ctx.lineTo(i, py);
+    });
+    ctx.stroke();
+    // Ball
+    const bx = points.length - 1;
+    const by = h - (x / (w * 0.85)) * (h * 0.7) - h * 0.1;
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+    ctx.beginPath(); ctx.arc(bx, by, 5, 0, Math.PI * 2); ctx.fill();
+
+    if (now - startTime < 3000) springAnim = requestAnimationFrame(draw);
+  }
+  x = 0; v = 0;
+  springAnim = requestAnimationFrame(draw);
+}
+
+['stiffness','damping','mass'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSpring);
+});
+updateSpring();
+
+// Timing bars
+const timings = [
+  ['Response', 100, 100], ['Micro', 200, 200], ['Fade In', 150, 180],
+  ['Fade Out', 100, 120], ['Modal Enter', 250, 300], ['Modal Exit', 175, 200],
+  ['Tooltip', 300, 400], ['Stagger', 40, 50], ['Debounce', 200, 300],
+  ['Toast', 5000, 6000], ['Animation Max', 400, 400],
+];
+const maxTime = 6000;
+const barsContainer = document.getElementById('timingBars');
+timings.forEach(([name, val, max]) => {
+  const pct = (val / maxTime) * 100;
+  barsContainer.innerHTML += `<div class="timing-row">
+    <span class="timing-name">${name}</span>
+    <div class="timing-bar-wrap"><div class="timing-bar" style="width:${pct}%"></div></div>
+    <span class="timing-val">${val >= 1000 ? (val/1000)+'s' : val+'ms'}</span>
+  </div>`;
+});
+
+// Animate timing bars on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.timing-bar').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0%';
+        requestAnimationFrame(() => { bar.style.width = w; });
+      });
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+observer.observe(barsContainer);
+</script>
+
+</body>
+</html>
